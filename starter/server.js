@@ -8,13 +8,15 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
+const app = express();
+
 // ========================================
 // TODO: Task 2 - Serve Static Files
 // ========================================
 // Configure Express to serve static files from the 'public' directory
 // This middleware automatically serves HTML, CSS, images, etc.
 // Hint: This single line replaces all the file reading logic from Workshop 02!
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ========================================
 // BONUS: Custom Request Logging Middleware
@@ -36,17 +38,23 @@ app.use((req, res, next) => {
 // About home route
 // TODO: Create a GET route for '/'
 // Hint: serve 'index.html'
-
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+});
 
 // About page route
 // TODO: Create a GET route for '/about'
 // Hint: Similar to the home page route, but serve 'about.html'
-
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'about.html'))
+});
 
 // Contact page route
 // TODO: Create a GET route for '/contact'
 // Hint: Similar to the home page route, but serve 'contact.html'
-
+app.get('/contact', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'contact.html'))
+});
 
 // ========================================
 // TODO: Task 4 - Create API Endpoint
@@ -56,6 +64,13 @@ app.use((req, res, next) => {
 // TODO: Create a GET route for '/api/time'
 // It should return JSON with 'datetime' and 'timestamp' properties
 // Hint: Use res.json() to send JSON response
+app.get('/api/time', (req, res) => {
+    res.json();
+})
+
+app.get('/test-500-sync', (req, res) => {
+    throw new error('Intentional sync error for testing')
+})
 
 // ========================================
 // BONUS: Task 6 - Express Router (Optional)
@@ -90,30 +105,28 @@ app.use('/api', apiRouter);
 // 404 Handler - Must be placed AFTER all other routes
 // This catches any requests that don't match the routes above
 // TODO: Complete:
-/*
 app.use((req, res) => {
-    complete this line - res.status(404)....);
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
-*/
+
 
 
 // 500 Error Handler - Must be placed LAST
 // This catches any errors that occur in your application
 // Note: Error handling middleware has 4 parameters: (err, req, res, next)
 // TODO: Complete:
-/*
+
 app.use((err, req, res, next) => {
     console.error('Server Error:', err.stack);
-    complete this line - res.status(500)....);
+    res.status(500).sendFile(path.join(__dirname, 'public', '500.html'));
 });
-*/
 
 
 // ========================================
 // Start the Server
 // ========================================
 // TODO: Uncomment the code below to start the server:
-/*
+
 app.listen(PORT, () => {
     console.log(`✅ Server is running on http://localhost:${PORT}`);
     console.log('\n📍 Available routes:');
@@ -123,7 +136,6 @@ app.listen(PORT, () => {
     console.log('  GET /api/time      -> Current date/time API');
     console.log('\n⏹️  Press Ctrl+C to stop the server\n');
 });
-*/
 
 // ========================================
 // 🎯 IMPLEMENTATION TIPS
@@ -141,7 +153,7 @@ app.listen(PORT, () => {
 5. Key Express Methods:
    - app.use() → Apply middleware
    - app.get() → Define GET routes
-   - res.sendFile() → Send HTML files
+   - res.sendFile(path.join() → Send HTML files
    - res.json() → Send JSON responses
    - res.status() → Set HTTP status code
 
