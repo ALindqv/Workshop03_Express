@@ -22,12 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // BONUS: Custom Request Logging Middleware
 // ========================================
 // Uncomment this middleware to log all incoming requests:
-/*
+
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next(); // Don't forget to call next()!
 });
-*/
+
 
 
 // ========================================
@@ -64,10 +64,11 @@ app.get('/contact', (req, res) => {
 // TODO: Create a GET route for '/api/time'
 // It should return JSON with 'datetime' and 'timestamp' properties
 // Hint: Use res.json() to send JSON response
+/*
 app.get('/api/time', (req, res) => {
-    res.json();
+    res.json({ datetime: new Date().toISOString() });
 })
-
+*/
 app.get('/test-500-sync', (req, res) => {
     throw new error('Intentional sync error for testing')
 })
@@ -78,11 +79,14 @@ app.get('/test-500-sync', (req, res) => {
 // Organize API routes using Express Router
 // Complete section below to use Router:
 
-/*
+
 const apiRouter = express.Router();
 
 // Move the /api/time route to the router
 
+apiRouter.get('/time', (req, res) => {
+    res.json({ datetime: new Date().toISOString() });
+});
 
 // Add more API routes here if needed
 apiRouter.get('/info', (req, res) => {
@@ -95,7 +99,7 @@ apiRouter.get('/info', (req, res) => {
 
 // Mount the API router
 app.use('/api', apiRouter);
-*/
+
 
 
 // ========================================
